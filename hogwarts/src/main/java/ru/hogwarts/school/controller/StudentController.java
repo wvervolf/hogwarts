@@ -42,7 +42,7 @@ public class StudentController {
 
     @GetMapping
     public List<Student> filterByAge(@RequestParam int age){
-        return studentService.filterByColor(age);
+        return studentService.filterByAge(age);
     }
 
 }
