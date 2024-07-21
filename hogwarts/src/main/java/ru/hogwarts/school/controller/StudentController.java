@@ -3,6 +3,7 @@ package ru.hogwarts.school.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -40,9 +41,17 @@ public class StudentController {
         return studentService.remove(id);
     }
 
-    @GetMapping
+    @GetMapping(params = "age")
     public List<Student> filterByAge(@RequestParam int age){
         return studentService.filterByAge(age);
     }
+    @GetMapping(params = {"minAge", "maxAge"})
+    public List<Student> filterByRangeAge(@RequestParam int minAge, @RequestParam int maxAge) {
+        return studentService.filterByRangeAge(minAge, maxAge);
+    }
 
+    @GetMapping("/{id}/faculty")
+    public Faculty findStudentsFaculty(@PathVariable long id) {
+        return studentService.findStudentsFaculty(id);
+    }
 }

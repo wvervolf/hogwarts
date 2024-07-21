@@ -11,17 +11,26 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final FacultyRepository facultyRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
     }
 
     public Student create(Student student) {
+        Faculty faculty = null;
+        if(student.getFaculty() != null && student.getFaculty().getId() !=null){
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
+        }
+        student.setFaculty(faculty);
         student.setId(null);
         return studentRepository.save(student);
     }
@@ -29,8 +38,14 @@ public class StudentService {
     public void update(long id, Student student) {
         Student oldStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new FacultyNotFoundException(id));
-        oldStudent.setName(student.getName());
+        Faculty faculty = null;
+        if(student.getFaculty() != null && student.getFaculty().getId() !=null){
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
+        }
         oldStudent.setAge(student.getAge());
+        oldStudent.setName(student.getName());
+        oldStudent.setFaculty(faculty);
         studentRepository.save(oldStudent);
     }
 
@@ -48,5 +63,13 @@ public class StudentService {
 
     public List<Student> filterByAge(int age) {
         return studentRepository.findAllByAge(age);
+    }
+
+    public List<Student> filterByRangeAge(int minAge, int maxAge) {
+        return studentRepository.findAllByAgeBetween(minAge, maxAge);
+    }
+
+    public Faculty findStudentsFaculty(long id) {
+        return get(id).getFaculty();
     }
 }
