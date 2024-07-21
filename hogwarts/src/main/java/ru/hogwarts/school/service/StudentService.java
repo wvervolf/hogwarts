@@ -2,7 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
-import ru.hogwarts.school.exception.StudenNotFoundException;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -28,7 +28,7 @@ public class StudentService {
         Faculty faculty = null;
         if(student.getFaculty() != null && student.getFaculty().getId() !=null){
             faculty = facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
         }
         student.setFaculty(faculty);
         student.setId(null);
@@ -37,11 +37,11 @@ public class StudentService {
 
     public void update(long id, Student student) {
         Student oldStudent = studentRepository.findById(id)
-                .orElseThrow(() -> new FacultyNotFoundException(id));
+                .orElseThrow(() -> new StudentNotFoundException(id));
         Faculty faculty = null;
         if(student.getFaculty() != null && student.getFaculty().getId() !=null){
             faculty = facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
         }
         oldStudent.setAge(student.getAge());
         oldStudent.setName(student.getName());
@@ -51,12 +51,12 @@ public class StudentService {
 
     public Student get(long id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new FacultyNotFoundException(id));
+                .orElseThrow(() -> new StudentNotFoundException(id));
     }
 
     public Student remove(long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new FacultyNotFoundException(id));
+                .orElseThrow(() -> new StudentNotFoundException(id));
         studentRepository.delete(student);
         return student;
     }

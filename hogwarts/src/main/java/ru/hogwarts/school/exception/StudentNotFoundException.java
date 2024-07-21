@@ -1,8 +1,8 @@
 package ru.hogwarts.school.exception;
 
-public class StudenNotFoundException extends NotFoundException {
+public class StudentNotFoundException extends NotFoundException {
 
-    public StudenNotFoundException(long id) {
+    public StudentNotFoundException(long id) {
         super(id);
     }
 
