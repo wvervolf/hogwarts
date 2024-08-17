@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -68,6 +70,9 @@ public class AvatarService {
         }catch (IOException e){
             throw new AvatarProcessingExeption();
         }
+    }
+    public Page<Avatar> getAvatars(PageRequest pageRequest) {
+        return avatarRepository.findAll(pageRequest);
     }
 
 }
